@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МБанк — Форум</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; background: #f4f7fc; color: #1a2639; min-height: 100vh; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        .navbar {
+            background: #0b1a33;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .logo span { color: #7aa9ff; }
+        .logo-icon {
+            background: #2a7de1;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .nav-menu a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 18px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: 0.2s;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .nav-menu a:hover { color: white; background: rgba(255,255,255,0.08); }
+        .nav-menu a.active { color: #ffd700; background: rgba(255,215,0,0.12); }
+        .nav-menu a .label { font-size: 9px; font-weight: 500; color: rgba(255,255,255,0.5); }
+        .nav-menu a.active .label { color: #ffd700; }
+        .nav-menu a.dev { color: #ffd700; }
+        .nav-menu a.dev .label { color: #ffd700; }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .balance-box {
+            background: rgba(255,255,255,0.1);
+            padding: 4px 14px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .balance-box i { color: #ffd700; margin-right: 4px; }
+        .user-id {
+            background: #2a7de1;
+            padding: 3px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            color: white;
+            font-weight: 600;
+        }
+        .user-id.dev { background: #ffd700; color: #0b1a33; }
+        .user-id.admin { background: #ff6b6b; color: white; }
+        .btn-logout {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 4px 14px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+        .btn-logout:hover { background: rgba(255,255,255,0.2); }
+        .hidden { display: none !important; }
+
+        .auth-box {
+            max-width: 400px;
+            margin: 60px auto;
+            background: white;
+            padding: 36px 32px;
+            border-radius: 32px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            border: 1px solid #eef4fc;
+        }
+        .auth-box h2 { font-size: 1.8rem; margin-bottom: 4px; }
+        .auth-box .sub { color: #4a5d78; margin-bottom: 24px; }
+        .auth-box input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1.5px solid #e2eaf5;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            background: #fafcff;
+        }
+        .auth-box input:focus { outline: none; border-color: #2a7de1; background: white; }
+        .auth-box .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 60px;
+            background: #0b1a33;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+        .auth-box .btn:hover { background: #1d3b5e; }
+        .auth-box .toggle {
+            margin-top: 14px;
+            text-align: center;
+            color: #4a5d78;
+        }
+        .auth-box .toggle a { color: #2a7de1; font-weight: 600; cursor: pointer; }
+        .msg {
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-top: 10px;
+            font-weight: 500;
+            display: none;
+        }
+        .msg.success { display: block; background: #e6f7e6; color: #1a6e1a; border: 1px solid #b8e0b8; }
+        .msg.error { display: block; background: #fde8e8; color: #a11f1f; border: 1px solid #f5c2c2; }
+
+        .dashboard {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid #eef4fc;
+            margin-top: 24px;
+        }
+        .greeting {
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eef4fc;
+        }
+        .greeting h2 { font-size: 1.8rem; }
+        .greeting .sub { color: #4a5d78; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+        .card {
+            background: #f8faff;
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid #eef4fc;
+        }
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h3 i { color: #2a7de1; }
+
+        .page { display: none; }
+        .page.active { display: block; }
+
+        .coin {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #ffd700, #f0a500);
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 8px 25px rgba(240, 165, 0, 0.3);
+        }
+        .coin:active { transform: scale(0.92); }
+        .clicker-info { text-align: center; color: #4a5d78; }
+        .clicker-info span { font-weight: 700; color: #0b1a33; }
+
+        .transfer-form input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 14px;
+            border: 1.5px solid #e2eaf5;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            background: white;
+        }
+        .transfer-form input:focus { outline: none; border-color: #2a7de1; }
+        .transfer-form .btn-send {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 60px;
+            background: #0b1a33;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .transfer-form .btn-send:hover { background: #1d3b5e; }
+
+        .profile-info .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eef4fc;
+        }
+        .profile-info .label { color: #4a5d78; }
+        .profile-info .value { font-weight: 600; }
+
+        .message-list {
+            margin: 16px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .message-item {
+            background: #f8faff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            border-left: 4px solid #2a7de1;
+        }
+        .message-item .meta {
+            font-size: 0.8rem;
+            color: #4a5d78;
+        }
+        .message-item .text {
+            margin-top: 4px;
+            font-weight: 500;
+        }
+        .message-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .message-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 14px;
+            border: 1.5px solid #e2eaf5;
+            font-size: 1rem;
+        }
+        .message-input input:focus { outline: none; border-color: #2a7de1; }
+        .message-input button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 14px;
+            background: #0b1a33;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .message-input button:hover { background: #1d3b5e; }
+
+        .dev-panel {
+            background: #fff8e6;
+            border: 2px solid #ffd700;
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+        .dev-panel h3 { color: #b8860b; margin-bottom: 16px; }
+        .dev-panel .dev-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        .dev-panel .dev-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid #f0e0b0;
+        }
+        .dev-panel .dev-card h4 {
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            color: #0b1a33;
+        }
+        .dev-panel .dev-card input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1.5px solid #e2eaf5;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        .dev-panel .dev-card button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background: #0b1a33;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .dev-panel .dev-card button:hover { background: #1d3b5e; }
+        .dev-panel .dev-card button.gold { background: #ffd700; color: #0b1a33; }
+        .dev-panel .dev-card button.gold:hover { background: #e6c200; }
+        .dev-panel .dev-card button.danger { background: #c0392b; color: white; }
+        .dev-panel .dev-card button.danger:hover { background: #e74c3c; }
+
+        .admin-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .admin-list-item .info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .admin-list-item .perms {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .admin-list-item .perms label {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+        .admin-list-item .perms input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        .admin-list-item .perms button {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .admin-list-item .perms button.remove { background: #c0392b; color: white; }
+        .admin-list-item .perms button.remove:hover { background: #e74c3c; }
+
+        .info-box {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: #f0f5fe;
+            border-radius: 16px;
+            border: 1px solid #dce7fa;
+        }
+        .info-box p { color: #2e405b; font-size: 0.95rem; }
+
+        .admin-badge { background: #ff6b6b; color: white; font-size: 0.7rem; padding: 2px 10px; border-radius: 40px; }
+        .dev-badge { background: #ffd700; color: #0b1a33; font-size: 0.7rem; padding: 2px 10px; border-radius: 40px; }
+
+        .online-users {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .online-user {
+            background: #e6f7e6;
+            color: #1a6e1a;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Индикатор автообновления */
+        .auto-refresh-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(11, 26, 51, 0.85);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 11px;
+            font-weight: 500;
+            z-index: 999;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .auto-refresh-indicator .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ade80;
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 0; }
+            .navbar .container { flex-direction: column; align-items: stretch; }
+            .nav-menu { justify-content: center; gap: 2px; }
+            .nav-menu a { font-size: 16px; padding: 4px 8px; }
+            .nav-menu a .label { font-size: 7px; }
+            .nav-right { justify-content: center; }
+            .dashboard { padding: 20px; margin-top: 16px; }
+            .auth-box { margin: 30px 10px; padding: 24px 20px; }
+            .message-input { flex-direction: column; }
+            .dev-panel .dev-grid { grid-template-columns: 1fr; }
+            .admin-list-item { flex-direction: column; align-items: stretch; }
+            .admin-list-item .perms { justify-content: center; }
+            .auto-refresh-indicator { bottom: 10px; right: 10px; font-size: 10px; padding: 4px 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <div class="logo" onclick="showPage('home')">
+            <div class="logo-icon">М</div>
+            <span>М<span>Банк</span></span>
+        </div>
+        <div class="nav-menu" id="navMenu">
+            <a class="active" onclick="showPage('home')" data-page="home">
+                <i class="fas fa-home"></i><span class="label">Главная</span>
+            </a>
+            <a onclick="showPage('transfer')" data-page="transfer">
+                <i class="fas fa-paper-plane"></i><span class="label">Перевод</span>
+            </a>
+            <a onclick="showPage('clicker')" data-page="clicker">
+                <i class="fas fa-coins"></i><span class="label">Кликер</span>
+            </a>
+            <a onclick="showPage('profile')" data-page="profile">
+                <i class="fas fa-user"></i><span class="label">Аккаунт</span>
+            </a>
+            <a id="devMenuLink" class="dev hidden" onclick="showPage('dev')" data-page="dev">
+                <i class="fas fa-code"></i><span class="label">Dev</span>
+            </a>
+            <a id="adminMenuLink" class="hidden" onclick="showPage('admins')" data-page="admins" style="color:#ff6b6b;">
+                <i class="fas fa-user-shield"></i><span class="label">Админы</span>
+            </a>
+        </div>
+        <div class="nav-right" id="navRight">
+            <div class="balance-box hidden" id="balanceBox">
+                <i class="fas fa-coins"></i> <span id="balanceNum">0</span> ₽
+            </div>
+            <span class="user-id hidden" id="userIdLabel">ID: —</span>
+            <button class="btn-logout hidden" id="logoutBtn">Выйти</button>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div id="authBlock" class="auth-box">
+        <h2 id="authTitle">Вход в МБанк</h2>
+        <p class="sub" id="authSub">Войдите в свой аккаунт</p>
+        <input type="text" id="authLogin" placeholder="Имя пользователя" />
+        <input type="password" id="authPassword" placeholder="Пароль" />
+        <button class="btn" id="authBtn">Войти</button>
+        <div class="toggle">
+            <span id="toggleText">Нет аккаунта?</span>
+            <a id="toggleLink">Зарегистрироваться</a>
+        </div>
+        <div id="authMsg" class="msg"></div>
+    </div>
+
+    <div id="dashBlock" class="hidden">
+
+        <div id="page-home" class="page active">
+            <div class="dashboard">
+                <div class="greeting">
+                    <h2 id="greetUser">Добро пожаловать!</h2>
+                    <p class="sub">ID: <strong id="dashId">—</strong> · Баланс: <strong id="dashBal">0</strong> ₽</p>
+                    <div class="online-users" id="onlineUsers">
+                        <span style="color:#4a5d78;font-size:0.9rem;">Онлайн:</span>
+                    </div>
+                </div>
+                <h3><i class="fas fa-comment-dots"></i> Общий чат</h3>
+                <div id="messageList" class="message-list"></div>
+                <div id="messageForm" class="message-input hidden">
+                    <input type="text" id="messageInput" placeholder="Напишите сообщение..." />
+                    <button onclick="addMessage()"><i class="fas fa-paper-plane"></i> Отправить</button>
+                </div>
+                <div id="messageBlocked" class="info-box hidden">
+                    <p><i class="fas fa-lock" style="color:#c0392b;"></i> 
+                        <strong>Только администраторы могут писать сообщения.</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-transfer" class="page">
+            <div class="dashboard">
+                <h2 style="margin-bottom:20px;"><i class="fas fa-paper-plane" style="color:#2a7de1;"></i> Перевод денег</h2>
+                <form class="transfer-form" id="transferForm">
+                    <input type="text" id="transferId" placeholder="ID получателя (000002)" />
+                    <input type="number" id="transferSum" placeholder="Сумма (₽)" min="1" />
+                    <button type="submit" class="btn-send">
+                        <i class="fas fa-arrow-right"></i> Перевести
+                    </button>
+                    <div id="transferMsg" class="msg"></div>
+                </form>
+                <div class="info-box" style="margin-top:16px;">
+                    <p><i class="fas fa-info-circle" style="color:#2a7de1;"></i> 
+                        Ваш ID: <strong id="transferUserId">—</strong> · Баланс: <strong id="transferBalance">0</strong> ₽
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-clicker" class="page">
+            <div class="dashboard">
+                <h2 style="margin-bottom:20px;"><i class="fas fa-coins" style="color:#ffd700;"></i> Кликер</h2>
+                <div style="text-align:center;padding:20px 0;">
+                    <div class="coin" id="coinBtn">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="clicker-info">
+                        +1 ₽ за клик · Всего кликов: <span id="clickCount">0</span>
+                    </div>
+                    <div class="clicker-info" style="margin-top:8px;font-size:1.2rem;">
+                        Баланс: <span id="clickerBalance">0</span> ₽
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-profile" class="page">
+            <div class="dashboard">
+                <h2 style="margin-bottom:20px;"><i class="fas fa-user" style="color:#2a7de1;"></i> Мой аккаунт</h2>
+                <div class="profile-info">
+                    <div class="row"><span class="label">ID пользователя</span><span class="value" id="profileId">—</span></div>
+                    <div class="row"><span class="label">Имя пользователя</span><span class="value" id="profileName">—</span></div>
+                    <div class="row"><span class="label">Роль</span><span class="value" id="profileRole">Пользователь</span></div>
+                    <div class="row"><span class="label">Баланс</span><span class="value" id="profileBalance">0 ₽</span></div>
+                    <div class="row"><span class="label">Всего кликов</span><span class="value" id="profileClicks">0</span></div>
+                    <div class="row"><span class="label">Всего заработано</span><span class="value" id="profileEarned">0 ₽</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-dev" class="page">
+            <div class="dashboard">
+                <h2 style="margin-bottom:20px;color:#b8860b;"><i class="fas fa-code"></i> Панель разработчика</h2>
+                <p style="color:#4a5d78;margin-bottom:20px;"><i class="fas fa-lock" style="color:#ffd700;"></i> Полный доступ ко всем функциям</p>
+                <div class="dev-panel">
+                    <h3><i class="fas fa-tools"></i> Управление пользователями</h3>
+                    <div class="dev-grid">
+                        <div class="dev-card">
+                            <h4><i class="fas fa-money-bill-wave"></i> Выдать деньги</h4>
+                            <input type="text" id="devGiveId" placeholder="ID пользователя" />
+                            <input type="number" id="devGiveAmount" placeholder="Сумма" />
+                            <button onclick="devGiveMoney()">Выдать</button>
+                        </div>
+                        <div class="dev-card">
+                            <h4><i class="fas fa-user-shield"></i> Назначить админа</h4>
+                            <input type="text" id="devAdminId" placeholder="ID пользователя" />
+                            <button onclick="devMakeAdmin()" class="gold">Сделать админом</button>
+                        </div>
+                        <div class="dev-card">
+                            <h4><i class="fas fa-edit"></i> Изменить данные</h4>
+                            <input type="text" id="devEditId" placeholder="ID пользователя" />
+                            <input type="text" id="devEditName" placeholder="Новое имя" />
+                            <input type="password" id="devEditPass" placeholder="Новый пароль" />
+                            <button onclick="devEditUser()">Сохранить</button>
+                        </div>
+                        <div class="dev-card">
+                            <h4><i class="fas fa-trash"></i> Удалить пользователя</h4>
+                            <input type="text" id="devDeleteId" placeholder="ID пользователя" />
+                            <button onclick="devDeleteUser()" class="danger">Удалить</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="dev-panel" style="margin-top:16px;">
+                    <h3><i class="fas fa-users"></i> Все пользователи</h3>
+                    <div id="devUserList" style="max-height:300px;overflow-y:auto;"></div>
+                </div>
+                <div id="devMsg" class="msg"></div>
+            </div>
+        </div>
+
+        <div id="page-admins" class="page">
+            <div class="dashboard">
+                <h2 style="margin-bottom:20px;color:#ff6b6b;"><i class="fas fa-user-shield"></i> Управление администраторами</h2>
+                <p style="color:#4a5d78;margin-bottom:20px;"><i class="fas fa-lock" style="color:#ff6b6b;"></i> Только для разработчика</p>
+                <div class="dev-panel" style="border-color:#ff6b6b;">
+                    <h3 style="color:#c0392b;"><i class="fas fa-list"></i> Список администраторов</h3>
+                    <div id="adminList"></div>
+                </div>
+                <div id="adminMsg" class="msg"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== ИНДИКАТОР АВТООБНОВЛЕНИЯ ===== -->
+<div class="auto-refresh-indicator" id="refreshIndicator">
+    <span class="dot"></span>
+    <span>Обновление каждые 5 сек</span>
+</div>
+
+<script>
+    // ===== API_URL (ВАША ССЫЛКА) =====
+    const API_URL = 'https://9120241b-a594-4234-afb2-1268a647bea7-00-zlp0m27qje0b.sisko.replit.dev/api/';
+
+    let currentUser = null;
+    let isLoginMode = true;
+    let currentPage = 'home';
+    let refreshInterval = null;
+
+    // ===== СОХРАНЕНИЕ И ВОССТАНОВЛЕНИЕ СЕССИИ =====
+    function saveSession(user) {
+        try {
+            localStorage.setItem('mbank_session', JSON.stringify({ userId: user.id }));
+        } catch(e) {}
+    }
+
+    function getSession() {
+        try {
+            const data = localStorage.getItem('mbank_session');
+            return data ? JSON.parse(data) : null;
+        } catch(e) { return null; }
+    }
+
+    function clearSession() {
+        localStorage.removeItem('mbank_session');
+    }
+
+    // ===== ЗАПРОСЫ К API =====
+    async function apiRequest(endpoint, method, data) {
+        try {
+            const response = await fetch(API_URL + endpoint, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: data ? JSON.stringify(data) : undefined
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'Ошибка сервера');
+            return result;
+        } catch (error) {
+            console.error('Ошибка API:', error);
+            return null;
+        }
+    }
+
+    function showMessage(element, text, type) {
+        element.className = 'msg ' + type;
+        element.textContent = text;
+        element.style.display = 'block';
+    }
+    function hideMessage(element) { element.style.display = 'none'; }
+
+    // ===== ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ =====
+    function showPage(page) {
+        currentPage = page;
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        const target = document.getElementById('page-' + page);
+        if (target) target.classList.add('active');
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.classList.remove('active');
+            if (link.dataset.page === page) link.classList.add('active');
+        });
+        if (page === 'dev') updateDevPanel();
+        if (page === 'admins') updateAdminPanel();
+    }
+
+    // ===== АВТОРИЗАЦИЯ =====
+    window.toggleAuthMode = function() {
+        isLoginMode = !isLoginMode;
+        document.getElementById('authTitle').textContent = isLoginMode ? 'Вход в МБанк' : 'Регистрация';
+        document.getElementById('authSub').textContent = isLoginMode ? 'Войдите в свой аккаунт' : 'Создайте новый аккаунт';
+        document.getElementById('authBtn').textContent = isLoginMode ? 'Войти' : 'Зарегистрироваться';
+        document.getElementById('toggleText').textContent = isLoginMode ? 'Нет аккаунта?' : 'Уже есть аккаунт?';
+        document.getElementById('toggleLink').textContent = isLoginMode ? 'Зарегистрироваться' : 'Войти';
+        hideMessage(document.getElementById('authMsg'));
+    };
+
+    window.handleAuth = async function() {
+        const login = document.getElementById('authLogin').value.trim();
+        const password = document.getElementById('authPassword').value.trim();
+        const msgEl = document.getElementById('authMsg');
+
+        if (!login || !password) {
+            showMessage(msgEl, '❌ Заполните все поля', 'error');
+            return;
+        }
+
+        if (isLoginMode) {
+            const result = await apiRequest('login', 'POST', { login, password });
+            if (result && result.success) {
+                currentUser = result.user;
+                saveSession(currentUser);
+                showDashboard();
+            } else {
+                showMessage(msgEl, '❌ Неверный логин или пароль', 'error');
+            }
+        } else {
+            const result = await apiRequest('register', 'POST', { login, password });
+            if (result && result.success) {
+                currentUser = result.user;
+                saveSession(currentUser);
+                showMessage(msgEl, result.message, 'success');
+                setTimeout(() => showDashboard(), 500);
+            } else if (result && result.error) {
+                showMessage(msgEl, '❌ ' + result.error, 'error');
+            }
+        }
+    };
+
+    window.logout = function() {
+        clearSession();
+        currentUser = null;
+        document.getElementById('dashBlock').classList.add('hidden');
+        document.getElementById('authBlock').classList.remove('hidden');
+        document.getElementById('balanceBox').classList.add('hidden');
+        document.getElementById('userIdLabel').classList.add('hidden');
+        document.getElementById('logoutBtn').classList.add('hidden');
+        document.getElementById('devMenuLink').classList.add('hidden');
+        document.getElementById('adminMenuLink').classList.add('hidden');
+        document.getElementById('authLogin').value = '';
+        document.getElementById('authPassword').value = '';
+        hideMessage(document.getElementById('authMsg'));
+        stopAutoRefresh();
+    };
+
+    // ===== АВТООБНОВЛЕНИЕ =====
+    function startAutoRefresh() {
+        if (refreshInterval) clearInterval(refreshInterval);
+        refreshInterval = setInterval(async function() {
+            if (!currentUser) return;
+            await refreshData();
+        }, 5000); // 5 секунд
+        console.log('🔄 Автообновление запущено (каждые 5 сек)');
+    }
+
+    function stopAutoRefresh() {
+        if (refreshInterval) {
+            clearInterval(refreshInterval);
+            refreshInterval = null;
+            console.log('🔄 Автообновление остановлено');
+        }
+    }
+
+    async function refreshData() {
+        if (!currentUser) return;
+        
+        try {
+            // Обновляем данные пользователя
+            const usersResult = await apiRequest('users', 'GET');
+            if (usersResult && usersResult[currentUser.id]) {
+                const userData = usersResult[currentUser.id];
+                // Обновляем только если данные изменились
+                if (userData.balance !== currentUser.balance) {
+                    currentUser.balance = userData.balance;
+                    updateUI();
+                }
+                if (userData.clicks !== currentUser.clicks) {
+                    currentUser.clicks = userData.clicks;
+                    updateUI();
+                }
+                if (userData.earned !== currentUser.earned) {
+                    currentUser.earned = userData.earned;
+                    updateUI();
+                }
+                if (userData.isAdmin !== currentUser.isAdmin) {
+                    currentUser.isAdmin = userData.isAdmin;
+                }
+                if (userData.isDev !== currentUser.isDev) {
+                    currentUser.isDev = userData.isDev;
+                }
+            }
+            
+            // Обновляем сообщения
+            await renderMessages();
+            
+            // Обновляем онлайн-пользователей
+            await updateOnlineUsers();
+            
+            // Обновляем dev панель если открыта
+            if (currentPage === 'dev') {
+                await updateDevPanel();
+            }
+            
+        } catch (error) {
+            console.error('Ошибка при обновлении:', error);
+        }
+    }
+
+    function updateUI() {
+        if (!currentUser) return;
+        
+        document.getElementById('balanceNum').textContent = currentUser.balance;
+        document.getElementById('dashBal').textContent = currentUser.balance;
+        document.getElementById('transferBalance').textContent = currentUser.balance;
+        document.getElementById('clickCount').textContent = currentUser.clicks || 0;
+        document.getElementById('clickerBalance').textContent = currentUser.balance;
+        document.getElementById('profileBalance').textContent = currentUser.balance + ' ₽';
+        document.getElementById('profileClicks').textContent = currentUser.clicks || 0;
+        document.getElementById('profileEarned').textContent = (currentUser.earned || 0) + ' ₽';
+    }
+
+    // ===== ПОКАЗАТЬ ДАШБОРД =====
+    function showDashboard() {
+        if (!currentUser) return;
+
+        document.getElementById('authBlock').classList.add('hidden');
+        document.getElementById('dashBlock').classList.remove('hidden');
+
+        const isDevUser = currentUser.isDev || false;
+        const isAdminUser = currentUser.isAdmin || false;
+        const hasDev = isDevUser;
+
+        document.getElementById('balanceBox').classList.remove('hidden');
+        document.getElementById('balanceNum').textContent = currentUser.balance;
+        document.getElementById('userIdLabel').classList.remove('hidden');
+        let roleText = 'ID: ' + currentUser.id;
+        if (isDevUser) {
+            roleText += ' ⭐ Разработчик';
+            document.getElementById('userIdLabel').className = 'user-id dev';
+        } else if (isAdminUser) {
+            roleText += ' 👑 Админ';
+            document.getElementById('userIdLabel').className = 'user-id admin';
+        } else {
+            document.getElementById('userIdLabel').className = 'user-id';
+        }
+        document.getElementById('userIdLabel').textContent = roleText;
+        document.getElementById('logoutBtn').classList.remove('hidden');
+
+        if (hasDev) {
+            document.getElementById('devMenuLink').classList.remove('hidden');
+            document.getElementById('adminMenuLink').classList.remove('hidden');
+        } else {
+            document.getElementById('devMenuLink').classList.add('hidden');
+            document.getElementById('adminMenuLink').classList.add('hidden');
+        }
+
+        const canWrite = isDevUser || isAdminUser;
+        const form = document.getElementById('messageForm');
+        const blocked = document.getElementById('messageBlocked');
+        if (canWrite) {
+            form.classList.remove('hidden');
+            blocked.classList.add('hidden');
+        } else {
+            form.classList.add('hidden');
+            blocked.classList.remove('hidden');
+        }
+
+        document.getElementById('greetUser').textContent = 'Привет, ' + currentUser.login + '!' + (isDevUser ? ' ⭐' : '') + (isAdminUser ? ' 👑' : '');
+        document.getElementById('dashId').textContent = currentUser.id;
+        document.getElementById('dashBal').textContent = currentUser.balance;
+        document.getElementById('transferUserId').textContent = currentUser.id;
+        document.getElementById('transferBalance').textContent = currentUser.balance;
+        document.getElementById('clickCount').textContent = currentUser.clicks || 0;
+        document.getElementById('clickerBalance').textContent = currentUser.balance;
+        document.getElementById('profileId').textContent = currentUser.id;
+        document.getElementById('profileName').textContent = currentUser.login;
+        let role = 'Пользователь';
+        if (isDevUser) role = '⭐ Разработчик';
+        else if (isAdminUser) role = '👑 Администратор';
+        document.getElementById('profileRole').textContent = role;
+        document.getElementById('profileBalance').textContent = currentUser.balance + ' ₽';
+        document.getElementById('profileClicks').textContent = currentUser.clicks || 0;
+        document.getElementById('profileEarned').textContent = (currentUser.earned || 0) + ' ₽';
+
+        renderMessages();
+        updateOnlineUsers();
+        showPage('home');
+        
+        // Запускаем автообновление
+        startAutoRefresh();
+    }
+
+    // ===== ОНЛАЙН-ПОЛЬЗОВАТЕЛИ =====
+    async function updateOnlineUsers() {
+        const result = await apiRequest('users', 'GET');
+        if (result) {
+            const container = document.getElementById('onlineUsers');
+            let html = '<span style="color:#4a5d78;font-size:0.9rem;">Онлайн:</span>';
+            for (let id in result) {
+                const u = result[id];
+                let role = '';
+                if (u.isDev) role = '⭐';
+                else if (u.isAdmin) role = '👑';
+                html += `<span class="online-user">${u.login} ${role}</span>`;
+            }
+            container.innerHTML = html;
+        }
+    }
+
+    // ===== СООБЩЕНИЯ =====
+    async function renderMessages() {
+        const result = await apiRequest('messages', 'GET');
+        if (result) {
+            const list = document.getElementById('messageList');
+            list.innerHTML = '';
+            if (result.length === 0) {
+                list.innerHTML = '<p style="color:#4a5d78;text-align:center;padding:20px;">Пока нет сообщений</p>';
+                return;
+            }
+            result.slice().reverse().forEach(msg => {
+                const div = document.createElement('div');
+                div.className = 'message-item';
+                div.innerHTML = `
+                    <div class="meta">${msg.author} (${msg.id}) ${msg.isDev ? '⭐' : ''} ${msg.isAdmin ? '👑' : ''} · ${msg.time}</div>
+                    <div class="text">${msg.text}</div>
+                `;
+                list.appendChild(div);
+            });
+        }
+    }
+
+    window.addMessage = async function() {
+        if (!currentUser) return;
+        const input = document.getElementById('messageInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const result = await apiRequest('message', 'POST', {
+            author: currentUser.login,
+            id: currentUser.id,
+            text: text,
+            isAdmin: currentUser.isAdmin || false,
+            isDev: currentUser.isDev || false
+        });
+
+        if (result && result.success) {
+            input.value = '';
+            await renderMessages();
+        }
+    };
+
+    // ===== КЛИКЕР =====
+    window.clickCoin = async function() {
+        if (!currentUser) return;
+        const result = await apiRequest('click', 'POST', { userId: currentUser.id });
+        if (result && result.success) {
+            currentUser.balance = result.newBalance;
+            currentUser.clicks = result.newClicks;
+            currentUser.earned = (currentUser.earned || 0) + 1;
+            updateUI();
+        }
+    };
+
+    // ===== ПЕРЕВОД =====
+    window.transferMoney = async function(e) {
+        e.preventDefault();
+        if (!currentUser) return;
+        
+        const targetId = document.getElementById('transferId').value.trim();
+        const amount = parseInt(document.getElementById('transferSum').value);
+        const msgEl = document.getElementById('transferMsg');
+        hideMessage(msgEl);
+
+        if (!targetId || !/^\d{6}$/.test(targetId)) {
+            showMessage(msgEl, '❌ Введите ID из 6 цифр', 'error');
+            return;
+        }
+        if (!amount || amount <= 0) {
+            showMessage(msgEl, '❌ Введите сумму больше 0', 'error');
+            return;
+        }
+
+        const result = await apiRequest('transfer', 'POST', {
+            senderId: currentUser.id,
+            receiverId: targetId,
+            amount: amount
+        });
+
+        if (result && result.success) {
+            currentUser.balance = result.senderBalance;
+            updateUI();
+            document.getElementById('transferId').value = '';
+            document.getElementById('transferSum').value = '';
+            showMessage(msgEl, result.message, 'success');
+        } else if (result && result.error) {
+            showMessage(msgEl, '❌ ' + result.error, 'error');
+        }
+    };
+
+    // ===== DEV ПАНЕЛЬ =====
+    async function updateDevPanel() {
+        if (!currentUser || !currentUser.isDev) return;
+        const result = await apiRequest('users', 'GET');
+        if (result) {
+            const list = document.getElementById('devUserList');
+            list.innerHTML = '';
+            for (let id in result) {
+                const u = result[id];
+                let role = 'Пользователь';
+                if (u.isDev) role = '⭐ Разработчик';
+                else if (u.isAdmin) role = '👑 Админ';
+                const div = document.createElement('div');
+                div.style.cssText = 'padding:6px 0;border-bottom:1px solid #eee;display:flex;justify-content:space-between;';
+                div.innerHTML = `<span><strong>${u.login}</strong> (${u.id})</span><span>${role} · ${u.balance} ₽</span>`;
+                list.appendChild(div);
+            }
+        }
+    }
+
+    window.devGiveMoney = async function() {
+        if (!currentUser || !currentUser.isDev) return;
+        const userId = document.getElementById('devGiveId').value.trim();
+        const amount = parseInt(document.getElementById('devGiveAmount').value);
+        const msgEl = document.getElementById('devMsg');
+        hideMessage(msgEl);
+
+        if (!userId || !amount || amount <= 0) {
+            showMessage(msgEl, '❌ Введите корректные данные', 'error');
+            return;
+        }
+
+        const result = await apiRequest('give-money', 'POST', {
+            adminId: currentUser.id,
+            userId: userId,
+            amount: amount
+        });
+
+        if (result && result.success) {
+            document.getElementById('devGiveId').value = '';
+            document.getElementById('devGiveAmount').value = '';
+            showMessage(msgEl, result.message, 'success');
+            await updateDevPanel();
+            await updateOnlineUsers();
+        } else if (result && result.error) {
+            showMessage(msgEl, '❌ ' + result.error, 'error');
+        }
+    };
+
+    window.devMakeAdmin = async function() {
+        if (!currentUser || !currentUser.isDev) return;
+        const userId = document.getElementById('devAdminId').value.trim();
+        const msgEl = document.getElementById('devMsg');
+        hideMessage(msgEl);
+
+        if (!userId) {
+            showMessage(msgEl, '❌ Введите ID пользователя', 'error');
+            return;
+        }
+
+        const result = await apiRequest('make-admin', 'POST', {
+            devId: currentUser.id,
+            userId: userId
+        });
+
+        if (result && result.success) {
+            document.getElementById('devAdminId').value = '';
+            showMessage(msgEl, result.message, 'success');
+            await updateDevPanel();
+            await updateOnlineUsers();
+        } else if (result && result.error) {
+            showMessage(msgEl, '❌ ' + result.error, 'error');
+        }
+    };
+
+    window.devEditUser = async function() {
+        if (!currentUser || !currentUser.isDev) return;
+        showMessage(document.getElementById('devMsg'), '⏳ Функция в разработке', 'success');
+    };
+
+    window.devDeleteUser = async function() {
+        if (!currentUser || !currentUser.isDev) return;
+        showMessage(document.getElementById('devMsg'), '⏳ Функция в разработке', 'success');
+    };
+
+    function updateAdminPanel() {
+        // Упрощённая версия для совместимости
+    }
+
+    // ===== ВОССТАНОВЛЕНИЕ СЕССИИ ПРИ ЗАГРУЗКЕ =====
+    async function restoreSession() {
+        const session = getSession();
+        if (!session) return false;
+        
+        try {
+            const usersResult = await apiRequest('users', 'GET');
+            if (usersResult && usersResult[session.userId]) {
+                currentUser = usersResult[session.userId];
+                showDashboard();
+                return true;
+            }
+        } catch (error) {
+            console.error('Ошибка восстановления сессии:', error);
+        }
+        return false;
+    }
+
+    // ===== ЗАПУСК =====
+    document.addEventListener('DOMContentLoaded', async function() {
+        document.getElementById('authBtn').addEventListener('click', window.handleAuth);
+        document.getElementById('toggleLink').addEventListener('click', window.toggleAuthMode);
+        document.getElementById('coinBtn').addEventListener('click', window.clickCoin);
+        document.getElementById('logoutBtn').addEventListener('click', window.logout);
+        document.getElementById('transferForm').addEventListener('submit', window.transferMoney);
+
+        document.getElementById('authLogin').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') window.handleAuth();
+        });
+        document.getElementById('authPassword').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') window.handleAuth();
+        });
+        document.getElementById('messageInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') window.addMessage();
+        });
+
+        // Пытаемся восстановить сессию
+        const restored = await restoreSession();
+        if (!restored) {
+            document.getElementById('authBlock').classList.remove('hidden');
+            document.getElementById('dashBlock').classList.add('hidden');
+        }
+    });
+</script>
+</body>
+  </html>
