@@ -16,43 +16,78 @@
             background: #f4f7fc;
             color: #1a2639;
             min-height: 100vh;
-            padding: 20px;
         }
         .container {
             max-width: 1100px;
             margin: 0 auto;
+            padding: 0 20px;
         }
+
+        /* ===== ШАПКА С МЕНЮ ===== */
         .navbar {
             background: #0b1a33;
-            padding: 12px 20px;
-            border-radius: 16px;
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .navbar .container {
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 30px;
         }
         .logo {
             display: flex;
             align-items: center;
             gap: 10px;
             color: white;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
         }
         .logo span { color: #7aa9ff; }
         .logo-icon {
             background: #2a7de1;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 20px;
             color: white;
         }
+
+        /* ===== МЕНЮ ===== */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .nav-menu a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 6px 4px;
+            border-bottom: 2px solid transparent;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .nav-menu a:hover {
+            color: white;
+            border-bottom-color: #2a7de1;
+        }
+        .nav-menu a.active {
+            color: white;
+            border-bottom-color: #2a7de1;
+        }
+
+        /* ===== ПРАВАЯ ЧАСТЬ ШАПКИ ===== */
         .nav-right {
             display: flex;
             align-items: center;
@@ -65,13 +100,15 @@
             border-radius: 40px;
             color: white;
             font-weight: 700;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255,255,255,0.08);
         }
-        .balance-box i { color: #ffd700; }
+        .balance-box i { color: #ffd700; margin-right: 4px; }
         .user-id {
             background: #2a7de1;
             padding: 4px 14px;
             border-radius: 40px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: white;
             font-weight: 600;
         }
@@ -83,16 +120,21 @@
             color: white;
             cursor: pointer;
             font-weight: 500;
+            font-size: 0.85rem;
+            transition: 0.2s;
         }
         .btn-logout:hover { background: rgba(255,255,255,0.2); }
         .hidden { display: none !important; }
+
+        /* ===== АВТОРИЗАЦИЯ ===== */
         .auth-box {
             max-width: 400px;
-            margin: 40px auto;
+            margin: 60px auto;
             background: white;
             padding: 36px 32px;
             border-radius: 32px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            border: 1px solid #eef4fc;
         }
         .auth-box h2 { font-size: 1.8rem; margin-bottom: 4px; }
         .auth-box .sub { color: #4a5d78; margin-bottom: 24px; }
@@ -152,11 +194,14 @@
             color: #a11f1f;
             border: 1px solid #f5c2c2;
         }
+
+        /* ===== ДАШБОРД ===== */
         .dashboard {
             background: white;
             border-radius: 24px;
             padding: 30px;
             border: 1px solid #eef4fc;
+            margin-top: 24px;
         }
         .greeting {
             margin-bottom: 24px;
@@ -165,6 +210,7 @@
         }
         .greeting h2 { font-size: 1.8rem; }
         .greeting .sub { color: #4a5d78; }
+
         .grid-2 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -184,6 +230,16 @@
             gap: 10px;
         }
         .card h3 i { color: #2a7de1; }
+
+        /* ===== СТРАНИЦЫ (переключаются через JS) ===== */
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+
+        /* ===== КЛИКЕР ===== */
         .coin {
             width: 100px;
             height: 100px;
@@ -202,6 +258,8 @@
         .coin:active { transform: scale(0.92); }
         .clicker-info { text-align: center; color: #4a5d78; }
         .clicker-info span { font-weight: 700; color: #0b1a33; }
+
+        /* ===== ПЕРЕВОД ===== */
         .transfer-form input {
             width: 100%;
             padding: 12px 16px;
@@ -227,6 +285,22 @@
             cursor: pointer;
         }
         .transfer-form .btn-send:hover { background: #1d3b5e; }
+
+        /* ===== АККАУНТ ===== */
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .profile-info .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eef4fc;
+        }
+        .profile-info .label { color: #4a5d78; }
+        .profile-info .value { font-weight: 600; }
+
         .info-box {
             margin-top: 24px;
             padding: 16px 20px;
@@ -235,21 +309,46 @@
             border: 1px solid #dce7fa;
         }
         .info-box p { color: #2e405b; font-size: 0.95rem; }
+
         @media (max-width: 600px) {
-            body { padding: 10px; }
-            .navbar { flex-direction: column; align-items: stretch; }
+            body { padding: 0; }
+            .navbar .container { flex-direction: column; align-items: stretch; }
+            .nav-menu { justify-content: center; gap: 12px; }
+            .nav-menu a { font-size: 0.85rem; }
             .nav-right { justify-content: center; }
-            .dashboard { padding: 20px; }
+            .dashboard { padding: 20px; margin-top: 16px; }
+            .auth-box { margin: 30px 10px; padding: 24px 20px; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="navbar">
-        <div class="logo">
+
+<!-- ===== ШАПКА С МЕНЮ ===== -->
+<nav class="navbar">
+    <div class="container">
+        <!-- Логотип -->
+        <div class="logo" onclick="showPage('home')">
             <div class="logo-icon">М</div>
             <span>М<span>Банк</span></span>
         </div>
+
+        <!-- Меню -->
+        <div class="nav-menu" id="navMenu">
+            <a class="active" onclick="showPage('home')" data-page="home">
+                <i class="fas fa-home"></i> Главная
+            </a>
+            <a onclick="showPage('transfer')" data-page="transfer">
+                <i class="fas fa-paper-plane"></i> Перевести
+            </a>
+            <a onclick="showPage('clicker')" data-page="clicker">
+                <i class="fas fa-coins"></i> Кликер
+            </a>
+            <a onclick="showPage('profile')" data-page="profile">
+                <i class="fas fa-user"></i> Аккаунт
+            </a>
+        </div>
+
+        <!-- Правая часть -->
         <div class="nav-right" id="navRight">
             <div class="balance-box hidden" id="balanceBox">
                 <i class="fas fa-coins"></i> <span id="balanceNum">0</span> ₽
@@ -258,7 +357,12 @@
             <button class="btn-logout hidden" id="logoutBtn">Выйти</button>
         </div>
     </div>
+</nav>
 
+<!-- ===== КОНТЕЙНЕР ===== -->
+<div class="container">
+
+    <!-- ===== АВТОРИЗАЦИЯ ===== -->
     <div id="authBlock" class="auth-box">
         <h2 id="authTitle">Вход в МБанк</h2>
         <p class="sub" id="authSub">Войдите в свой аккаунт</p>
@@ -272,25 +376,40 @@
         <div id="authMsg" class="msg"></div>
     </div>
 
-    <div id="dashBlock" class="dashboard hidden">
-        <div class="greeting">
-            <h2 id="greetUser">Добро пожаловать!</h2>
-            <p class="sub">ID: <strong id="dashId">—</strong> · Баланс: <strong id="dashBal">0 ₽</strong></p>
-        </div>
-        <div class="grid-2">
-            <div class="card">
-                <h3><i class="fas fa-hand-pointer"></i> Заработай</h3>
-                <div style="text-align:center;">
-                    <div class="coin" id="coinBtn">
-                        <i class="fas fa-coins"></i>
+    <!-- ===== ДАШБОРД ===== -->
+    <div id="dashBlock" class="hidden">
+
+        <!-- Страница: Главная -->
+        <div id="page-home" class="page active">
+            <div class="dashboard">
+                <div class="greeting">
+                    <h2 id="greetUser">Добро пожаловать!</h2>
+                    <p class="sub">ID: <strong id="dashId">—</strong> · Баланс: <strong id="dashBal">0 ₽</strong></p>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3><i class="fas fa-hand-pointer"></i> Кликер</h3>
+                        <p style="color:#4a5d78;">Зарабатывайте деньги просто нажимая на монетку!</p>
+                        <p style="margin-top:12px;font-weight:600;">Кликов: <span id="homeClicks">0</span></p>
                     </div>
-                    <div class="clicker-info">
-                        +1 ₽ за клик · Всего: <span id="clickCount">0</span>
+                    <div class="card">
+                        <h3><i class="fas fa-paper-plane"></i> Переводы</h3>
+                        <p style="color:#4a5d78;">Переводите деньги друзьям по ID.</p>
+                        <p style="margin-top:12px;font-weight:600;">Баланс: <span id="homeBalance">0</span> ₽</p>
                     </div>
                 </div>
+                <div class="info-box">
+                    <p><i class="fas fa-info-circle" style="color:#2a7de1;"></i> 
+                        Используйте меню сверху для навигации по сайту.
+                    </p>
+                </div>
             </div>
-            <div class="card">
-                <h3><i class="fas fa-paper-plane"></i> Перевод</h3>
+        </div>
+
+        <!-- Страница: Перевод -->
+        <div id="page-transfer" class="page">
+            <div class="dashboard">
+                <h2 style="margin-bottom:20px;"><i class="fas fa-paper-plane" style="color:#2a7de1;"></i> Перевод денег</h2>
                 <form class="transfer-form" id="transferForm">
                     <input type="text" id="transferId" placeholder="ID получателя (000002)" />
                     <input type="number" id="transferSum" placeholder="Сумма (₽)" min="1" />
@@ -299,17 +418,72 @@
                     </button>
                     <div id="transferMsg" class="msg"></div>
                 </form>
+                <div class="info-box" style="margin-top:16px;">
+                    <p><i class="fas fa-info-circle" style="color:#2a7de1;"></i> 
+                        Ваш ID: <strong id="transferUserId">—</strong> · Баланс: <strong id="transferBalance">0</strong> ₽
+                    </p>
+                </div>
             </div>
         </div>
-        <div class="info-box">
-            <p><i class="fas fa-info-circle" style="color:#2a7de1;"></i> 
-                <strong>Как перевести:</strong> Узнайте ID друга в шапке. Введите его ID и сумму.
-            </p>
+
+        <!-- Страница: Кликер -->
+        <div id="page-clicker" class="page">
+            <div class="dashboard">
+                <h2 style="margin-bottom:20px;"><i class="fas fa-coins" style="color:#ffd700;"></i> Кликер</h2>
+                <div style="text-align:center;padding:20px 0;">
+                    <div class="coin" id="coinBtn">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="clicker-info">
+                        +1 ₽ за клик · Всего кликов: <span id="clickCount">0</span>
+                    </div>
+                    <div class="clicker-info" style="margin-top:8px;font-size:1.2rem;">
+                        Баланс: <span id="clickerBalance">0</span> ₽
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- Страница: Аккаунт -->
+        <div id="page-profile" class="page">
+            <div class="dashboard">
+                <h2 style="margin-bottom:20px;"><i class="fas fa-user" style="color:#2a7de1;"></i> Мой аккаунт</h2>
+                <div class="profile-info">
+                    <div class="row">
+                        <span class="label">ID пользователя</span>
+                        <span class="value" id="profileId">—</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Имя пользователя</span>
+                        <span class="value" id="profileName">—</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Баланс</span>
+                        <span class="value" id="profileBalance">0 ₽</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Всего кликов</span>
+                        <span class="value" id="profileClicks">0</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Всего денег заработано</span>
+                        <span class="value" id="profileEarned">0 ₽</span>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <p><i class="fas fa-shield-alt" style="color:#2a7de1;"></i> 
+                        Ваши данные хранятся в вашем браузере. Никто не имеет к ним доступа.
+                    </p>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
+<!-- ===== СКРИПТ ===== -->
 <script>
+    // ---------- БАЗА ДАННЫХ ----------
     function getUsers() {
         try { return JSON.parse(localStorage.getItem('mbank_users')) || {}; } catch(e) { return {}; }
     }
@@ -337,6 +511,21 @@
     }
     function hideMessage(element) { element.style.display = 'none'; }
 
+    // ---------- ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ ----------
+    function showPage(page) {
+        // Скрываем все страницы
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        // Показываем нужную
+        const target = document.getElementById('page-' + page);
+        if (target) target.classList.add('active');
+        // Меняем активный пункт меню
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.classList.remove('active');
+            if (link.dataset.page === page) link.classList.add('active');
+        });
+    }
+
+    // ---------- ПЕРЕКЛЮЧЕНИЕ РЕЖИМА АВТОРИЗАЦИИ ----------
     let isLoginMode = true;
 
     window.toggleAuthMode = function() {
@@ -349,6 +538,7 @@
         hideMessage(document.getElementById('authMsg'));
     };
 
+    // ---------- АВТОРИЗАЦИЯ ----------
     window.handleAuth = function() {
         const login = document.getElementById('authLogin').value.trim();
         const password = document.getElementById('authPassword').value.trim();
@@ -388,7 +578,8 @@
                 login: login,
                 password: password,
                 balance: 100,
-                clicks: 0
+                clicks: 0,
+                earned: 100
             };
             saveUsers(users);
             saveSession({ userId: newId });
@@ -397,6 +588,7 @@
         }
     };
 
+    // ---------- ВЫХОД ----------
     window.logout = function() {
         clearSession();
         document.getElementById('dashBlock').classList.add('hidden');
@@ -409,6 +601,7 @@
         hideMessage(document.getElementById('authMsg'));
     };
 
+    // ---------- ПОКАЗАТЬ ДАШБОРД ----------
     function showDashboard() {
         const session = getSession();
         if (!session) return;
@@ -418,17 +611,40 @@
 
         document.getElementById('authBlock').classList.add('hidden');
         document.getElementById('dashBlock').classList.remove('hidden');
+
+        // Шапка
         document.getElementById('balanceBox').classList.remove('hidden');
         document.getElementById('balanceNum').textContent = user.balance;
         document.getElementById('userIdLabel').classList.remove('hidden');
         document.getElementById('userIdLabel').textContent = 'ID: ' + user.id;
         document.getElementById('logoutBtn').classList.remove('hidden');
+
+        // Главная
         document.getElementById('greetUser').textContent = 'Привет, ' + user.login + '!';
         document.getElementById('dashId').textContent = user.id;
         document.getElementById('dashBal').textContent = user.balance + ' ₽';
+        document.getElementById('homeClicks').textContent = user.clicks || 0;
+        document.getElementById('homeBalance').textContent = user.balance;
+
+        // Перевод
+        document.getElementById('transferUserId').textContent = user.id;
+        document.getElementById('transferBalance').textContent = user.balance;
+
+        // Кликер
         document.getElementById('clickCount').textContent = user.clicks || 0;
+        document.getElementById('clickerBalance').textContent = user.balance;
+
+        // Аккаунт
+        document.getElementById('profileId').textContent = user.id;
+        document.getElementById('profileName').textContent = user.login;
+        document.getElementById('profileBalance').textContent = user.balance + ' ₽';
+        document.getElementById('profileClicks').textContent = user.clicks || 0;
+        document.getElementById('profileEarned').textContent = (user.earned || 0) + ' ₽';
+
+        showPage('home');
     }
 
+    // ---------- КЛИКЕР ----------
     window.clickCoin = function() {
         const session = getSession();
         if (!session) return;
@@ -437,12 +653,23 @@
         if (!user) return;
         user.balance = (user.balance || 0) + 1;
         user.clicks = (user.clicks || 0) + 1;
+        user.earned = (user.earned || 0) + 1;
         saveUsers(users);
+
+        // Обновляем все элементы
         document.getElementById('balanceNum').textContent = user.balance;
         document.getElementById('dashBal').textContent = user.balance + ' ₽';
+        document.getElementById('homeClicks').textContent = user.clicks;
+        document.getElementById('homeBalance').textContent = user.balance;
+        document.getElementById('transferBalance').textContent = user.balance;
         document.getElementById('clickCount').textContent = user.clicks;
+        document.getElementById('clickerBalance').textContent = user.balance;
+        document.getElementById('profileBalance').textContent = user.balance + ' ₽';
+        document.getElementById('profileClicks').textContent = user.clicks;
+        document.getElementById('profileEarned').textContent = user.earned + ' ₽';
     };
 
+    // ---------- ПЕРЕВОД ----------
     window.transferMoney = function(e) {
         e.preventDefault();
         const session = getSession();
@@ -479,25 +706,35 @@
         sender.balance -= amount;
         receiver.balance = (receiver.balance || 0) + amount;
         saveUsers(users);
+
+        // Обновляем все элементы
         document.getElementById('balanceNum').textContent = sender.balance;
         document.getElementById('dashBal').textContent = sender.balance + ' ₽';
+        document.getElementById('homeBalance').textContent = sender.balance;
+        document.getElementById('transferBalance').textContent = sender.balance;
+        document.getElementById('clickerBalance').textContent = sender.balance;
+        document.getElementById('profileBalance').textContent = sender.balance + ' ₽';
         document.getElementById('transferId').value = '';
         document.getElementById('transferSum').value = '';
+
         showMessage(msgEl, '✅ Переведено ' + amount + ' ₽ пользователю ' + targetId, 'success');
     };
 
+    // ---------- ИНИЦИАЛИЗАЦИЯ ----------
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('authBtn').addEventListener('click', window.handleAuth);
         document.getElementById('toggleLink').addEventListener('click', window.toggleAuthMode);
         document.getElementById('coinBtn').addEventListener('click', window.clickCoin);
         document.getElementById('logoutBtn').addEventListener('click', window.logout);
         document.getElementById('transferForm').addEventListener('submit', window.transferMoney);
+
         document.getElementById('authLogin').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') window.handleAuth();
         });
         document.getElementById('authPassword').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') window.handleAuth();
         });
+
         const session = getSession();
         if (session) {
             const users = getUsers();
@@ -511,4 +748,4 @@
     });
 </script>
 </body>
-  </html>
+    </html>
